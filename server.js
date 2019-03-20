@@ -15,15 +15,18 @@ function capName(req, res, next) {
   next();
 }
 
+// Middleware
 server.use(express.json());
 server.use(helmet());
 server.use(capName);
-server.use("/api/users", userRoutes);
 
+// Routes
+server.use("/api/users", userRoutes);
+server.use("/api/posts", postRoutes);
+
+// Server online test
 server.get("/", (req, res, next) => {
   res.status(200).send("OK");
 });
-
-//server.use("/api/posts", postRoutes);
 
 module.exports = server;

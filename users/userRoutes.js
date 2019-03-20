@@ -1,5 +1,5 @@
 const express = require("express");
-const db = require("./userDB.js");
+const db = require("./userDb.js");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -54,6 +54,19 @@ router.put("/:id", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "There was an error updating the user" });
+  }
+});
+
+router.get("/:id/posts", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userPosts = await db.getUserPosts(id);
+    res.status(200).json({ userPosts });
+  } catch (err) {
+    console.log(err);
+    res
+      .status(500)
+      .json({ message: "Something went wrong getting the user's posts" });
   }
 });
 
