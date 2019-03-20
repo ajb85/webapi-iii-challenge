@@ -1,15 +1,27 @@
 const express = require("express");
-const postRouter = require("./posts/postRoutes.js");
-const userRouter = require("./users/userRoutes.js");
+const helmet = require("helmet");
+const postRoutes = require("./posts/postRoutes.js");
+const userRoutes = require("./users/userRoutes.js");
+
 const server = express();
 
-server.use(express.json());
+function capName(req, res, next) {
+  req.body.name = req.body.name
+    .split(" ")
+    .map(piece => piece[0].toUpperCase() + piece.substring(1))
+    .join(" ");
+  next();
+}
 
-server.get("/", (req, res) => {
+server.use(express.json());
+server.use(helmet());
+server.use(capName);
+server.use("/api/users", userRoutes);
+
+server.get("/", (req, res, next) => {
   res.status(200).send("OK");
 });
 
-server.use("/api/users", userRoutes);
-server.use("/api/posts", postRoutes);
+//server.use("/api/posts", postRoutes);
 
 module.exports = server;
