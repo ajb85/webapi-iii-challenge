@@ -15,6 +15,18 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {});
+router.post("/", async (req, res) => {
+  try {
+    if (req.body.text && req.body.user_id) {
+      const newPost = await db.insert(req.body);
+      res.status(201).json(newPost);
+    } else {
+      res.status(400).json({ message: "I need both 'text' and 'id'" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error inserting post" });
+  }
+});
 
 module.exports = router;
