@@ -6,10 +6,12 @@ const userRoutes = require("./users/userRoutes.js");
 const server = express();
 
 function capName(req, res, next) {
-  req.body.name = req.body.name
-    .split(" ")
-    .map(piece => piece[0].toUpperCase() + piece.substring(1))
-    .join(" ");
+  if (req.body.name) {
+    req.body.name = req.body.name
+      .split(" ")
+      .map(piece => piece[0].toUpperCase() + piece.substring(1))
+      .join(" ");
+  }
   next();
 }
 
